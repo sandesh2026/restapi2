@@ -12,11 +12,15 @@ node{
         }
     }
     stage('Code review'){
+        try {
         withMaven(maven:'mymaven')
         {
             sh 'mvn pmd:pmd'
         }
-        //
+        }
+        finally {
+            pmd canComputeNew: false, defaultEncoding: '', healthy: '', pattern: 'target/pmd.xml', unHealthy: ''
+        }
     }
     stage('AB Package'){
         withMaven(maven:'mymaven')
